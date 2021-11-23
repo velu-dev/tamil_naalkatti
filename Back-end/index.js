@@ -3,12 +3,29 @@ const bodyParser = require("body-parser");
 
 // create express app
 const app = express();
-
+var cors = require('cors')
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
-
+const corsOpts = {
+    origin: '*',
+  
+    methods: [
+      'GET',
+      'POST',
+    ],
+  
+    allowedHeaders: [
+      'Content-Type',
+    ],
+  };
+  
+  app.use(cors(corsOpts));
 // parse requests of content-type - application/json
 app.use(bodyParser.json());
+app.get("/get-seed-datas", (req, res)=>{
+    var maatham = ["சுறவம்", "கும்பம்", "மீனம்", "மேழம்", "விடை", "ஆடவை", "கடகம்", "மடங்கள்", "கன்னி", "துலை", "நளி", "சிலை"];
+    res.json({ status: true, data: maatham })
+})
 app.get("/get-calendar", (req, res) => {
     //கிழமை தமிழாக்கம் 
     var kilamai = ["ஞாயிறு", "திங்கள்", "செவ்வாய்", "அறிவன்", "வியாழன்", "வெள்ளி", "காரி"];
@@ -77,11 +94,12 @@ app.get("/get-calendar", (req, res) => {
     let data = {};
     //நாள்க்காட்டியை தொதமிழ்ப்படுத்தித் தொகுப்பது 
     data = {
-        naazhi: "" + nhour + ":" + nmin + ":" + nsec + "",
-        pozhuthu: "" + kilamai[nday] + "," + ap + "",
-        thingal: "" + maatham[nmonth] + "",
-        naal: "" + ndate + "",
-        varudam: "" + nyear + ""
+        naazhi: nhour + ":" + nmin + ":" + nsec,
+        pozhuthu: kilamai[nday] + "," + ap,
+        thingal: maatham[nmonth],
+        naal: ndate,
+        varudam: nyear,
+        maatham: maatham[nmonth]
     }
     res.json({ status: true, data: data })
 })
